@@ -1,0 +1,106 @@
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.*;
+
+public class DrawingCanvas extends JPanel {
+    private Color currentColor = Color.BLACK; // Default color for brush
+    private boolean isEraserActive = false; // Flag for eraser mode
+    private int lastX, lastY; // Last mouse coordinates
+    private int brushWidth = 5; // Default brush width
+    private Image canvasImage; // Image for the canvas
+    private Graphics2D g2d; // Graphics context for drawing
+
+    public DrawingCanvas() {
+        setBackground(Color.WHITE); // Set background color
+        setDoubleBuffered(true); // Enable double buffering
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                lastX = e.getX(); // Store starting coordinates
+                lastY = e.getY(); // Store starting coordinates
+                if (isEraserActive) {
+                    erase(lastX, lastY); // Erase at the starting point
+                } else {
+                    draw(lastX, lastY); // Draw at the starting point
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (!isEraserActive) {
+                    draw(e.getX(), e.getY()); // Draw at the end point when released
+                }
+            }
+        });
+
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (isEraserActive) {
+                    erase(e.getX(), e.getY()); // Erase while dragging
+                } else {
+                    draw(e.getX(), e.getY()); // Draw while dragging
+                }
+                lastX = e.getX(); // Update last coordinates
+                lastY = e.getY(); // Update last coordinates
+            }
+        });
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (canvasImage != null) {
+            g.drawImage(canvasImage, 0, 0, null); // Draw the image on the panel
+        }
+    }
+
+    public void initializeCanvas(int width, int height) {
+        canvasImage = createImage(width, height);
+        g2d = (Graphics2D) canvasImage.getGraphics();
+        clearCanvas(); // Clear canvas initially
+    }
+
+    public void clearCanvas() {
+        if (g2d != null) {  // Check if g2d is initialized before using it
+            g2d.setColor(Color.WHITE);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+            repaint();
+        }
+    }
+
+    public void setCurrentColor(Color color) {
+        this.currentColor = color; 
+        this.isEraserActive = false; 
+    }
+
+    public void activateEraser() {
+        this.isEraserActive = true; 
+    }
+
+    public void deactivateEraser() {
+        this.isEraserActive = false; 
+    }
+
+    public void setBrushWidth(int width) {
+        this.brushWidth = width; 
+    }
+
+    private void draw(int x, int y) {
+        if (g2d != null) {  // Check if g2d is initialized before using it
+            g2d.setColor(currentColor); 
+            g2d.drawLine(lastX, lastY, x, y); 
+            repaint(); 
+        }
+    }
+
+    private void erase(int x, int y) {
+        if (g2d != null) {  // Check if g2d is initialized before using it
+            g2d.setColor(Color.WHITE); 
+            g2d.fillOval(x - brushWidth / 2, y - brushWidth / 2, brushWidth, brushWidth);
+            repaint(); 
+        }
+    }
+}
