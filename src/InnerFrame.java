@@ -112,12 +112,13 @@ public class InnerFrame extends javax.swing.JFrame {
 
         Brawingboard.setBackground(new java.awt.Color(255, 255, 255));
         Brawingboard.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        Brawingboard.setToolTipText("");
 
         javax.swing.GroupLayout BrawingboardLayout = new javax.swing.GroupLayout(Brawingboard);
         Brawingboard.setLayout(BrawingboardLayout);
         BrawingboardLayout.setHorizontalGroup(
             BrawingboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 463, Short.MAX_VALUE)
         );
         BrawingboardLayout.setVerticalGroup(
             BrawingboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,6 +144,11 @@ public class InnerFrame extends javax.swing.JFrame {
         });
 
         BtnStar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/star-line.png"))); // NOI18N
+        BtnStar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnStarActionPerformed(evt);
+            }
+        });
 
         BtnRectangle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/rectangle-line.png"))); // NOI18N
         BtnRectangle.addActionListener(new java.awt.event.ActionListener() {
@@ -152,10 +158,25 @@ public class InnerFrame extends javax.swing.JFrame {
         });
 
         BtnTriangle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/triangle-line.png"))); // NOI18N
+        BtnTriangle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnTriangleActionPerformed(evt);
+            }
+        });
 
         BtnPentagon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/pentagon-line.png"))); // NOI18N
+        BtnPentagon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnPentagonActionPerformed(evt);
+            }
+        });
 
         BtnHexagon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/hexagon-line.png"))); // NOI18N
+        BtnHexagon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnHexagonActionPerformed(evt);
+            }
+        });
 
         BtnCircle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/circle-line.png"))); // NOI18N
         BtnCircle.addActionListener(new java.awt.event.ActionListener() {
@@ -258,7 +279,7 @@ public class InnerFrame extends javax.swing.JFrame {
                         .addComponent(jButton39, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton40, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
@@ -358,6 +379,11 @@ public class InnerFrame extends javax.swing.JFrame {
 
         BtnLayers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/stack-line.png"))); // NOI18N
         BtnLayers.setText("Layers");
+        BtnLayers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnLayersActionPerformed(evt);
+            }
+        });
 
         BtnFilter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/color-filter-line.png"))); // NOI18N
         BtnFilter.setText("Filters");
@@ -517,7 +543,7 @@ public class InnerFrame extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(BtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(Brawingboard, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Brawingboard, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(BtnAddimage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -530,7 +556,6 @@ public class InnerFrame extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BtnExit)
                     .addComponent(jLabel1))
@@ -547,7 +572,7 @@ public class InnerFrame extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Brawingboard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -578,7 +603,7 @@ public class InnerFrame extends javax.swing.JFrame {
 
     private void BtnSquareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSquareActionPerformed
         // TODO add your handling code here:
-        System.out.println("BTN square Action Perfomed");
+        drawingCanvas.setDrawingShape(true, "Square");
     }//GEN-LAST:event_BtnSquareActionPerformed
 
     private void BtnBrushActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBrushActionPerformed
@@ -586,11 +611,11 @@ public class InnerFrame extends javax.swing.JFrame {
         Color selectedColor = JColorChooser.showDialog(this, "Choose Brush Color", Color.BLACK);
 
         if (selectedColor != null) {
-            drawingCanvas.setCurrentColor(selectedColor); // Set the selected color for the brush
+            drawingCanvas.setCurrentColor(selectedColor);
         }
 
         drawingCanvas.deactivateEraser();
-        drawingCanvas.setDrawingShape(false, ""); // Set to brush mode when button is pressed
+        drawingCanvas.setDrawingShape(false, ""); 
     }//GEN-LAST:event_BtnBrushActionPerformed
 
     private void BtnEraserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEraserActionPerformed
@@ -636,12 +661,34 @@ public class InnerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnGoforwardActionPerformed
 
     private void BtnRectangleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRectangleActionPerformed
-        drawingCanvas.setDrawingShape(true, "Rectangle"); // Set to draw rectangles when button is pressed
+        drawingCanvas.setDrawingShape(true, "Rectangle");
     }//GEN-LAST:event_BtnRectangleActionPerformed
 
     private void BtnCircleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCircleActionPerformed
-        drawingCanvas.setDrawingShape(true, "Circle"); // Set to draw circles when button is pressed
+        drawingCanvas.setDrawingShape(true, "Circle");
     }//GEN-LAST:event_BtnCircleActionPerformed
+
+    private void BtnTriangleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnTriangleActionPerformed
+        // TODO add your handling code here:
+        drawingCanvas.setDrawingShape(true, "Triangle");
+    }//GEN-LAST:event_BtnTriangleActionPerformed
+
+    private void BtnStarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnStarActionPerformed
+        // TODO add your handling code here:
+        drawingCanvas.setDrawingShape(true, "drawStar");
+    }//GEN-LAST:event_BtnStarActionPerformed
+
+    private void BtnLayersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLayersActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnLayersActionPerformed
+
+    private void BtnPentagonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPentagonActionPerformed
+        drawingCanvas.setDrawingShape(true, "Pentagon");
+    }//GEN-LAST:event_BtnPentagonActionPerformed
+
+    private void BtnHexagonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnHexagonActionPerformed
+        drawingCanvas.setDrawingShape(true, "Hexagon");
+    }//GEN-LAST:event_BtnHexagonActionPerformed
 
     /**
      * @param args the command line arguments

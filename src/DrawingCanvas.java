@@ -96,6 +96,9 @@ public class DrawingCanvas extends JPanel {
 
     public void setBrushWidth(int width) {
         this.brushWidth = width;
+        if (g2d != null) {  // Update stroke width in g2d if initialized
+            g2d.setStroke(new BasicStroke(brushWidth));
+        }
     }
 
     public void setDrawingShape(boolean drawingShape, String shapeType) {
@@ -111,15 +114,82 @@ public class DrawingCanvas extends JPanel {
 
             System.out.println("isDrawing Shape - Release" + height + "-" + width);
 
-            if ("Rectangle".equals(currentShape)) {
-                g2d.drawRect(Math.min(lastX, x), Math.min(lastY, y), width, height); // Draw rectangle
-            } else if ("Circle".equals(currentShape)) {
-                int diameter = Math.max(width, height);
-                g2d.drawOval(Math.min(lastX, x), Math.min(lastY, y), diameter, diameter); // Draw circle
+            switch (currentShape) {
+                case "Rectangle":
+                    g2d.drawRect(Math.min(lastX, x), Math.min(lastY, y), width, height); // Draw rectangle
+                    break;
+                case "Circle":
+                    int diameter = Math.max(width, height);
+                    g2d.drawOval(Math.min(lastX, x) , Math.min(lastY, y) , diameter, diameter); // Draw circle
+                    break;
+                case "Square":
+                    int sideLength = Math.min(width, height);
+                    g2d.drawRect(Math.min(lastX, x) , Math.min(lastY, y), sideLength, sideLength); // Draw square
+                    break;
+                case "Triangle":
+                    drawTriangle(lastX, lastY, x, y); // Draw triangle using custom method
+                    break;
+                case "Star":
+                    drawStar(lastX, lastY, width); // Draw star using custom method
+                    break;
+                case "Pentagon":
+                    drawPentagon(lastX, lastY, Math.max(width, height)); // Draw pentagon using custom method
+                    break;
+                case "Hexagon":
+                    drawHexagon(lastX, lastY, Math.max(width, height)); // Draw hexagon using custom method
+                    break;
+                default:
+                    break;
             }
 
             repaint();
         }
+    }
+
+    private void drawTriangle(int x1, int y1, int x2, int y2) {
+        int[] xPoints = {x1, x2, (x1 + x2) / 2};
+        int[] yPoints = {y1, y1, y1 - Math.abs(x2 - x1)};
+        g2d.drawPolygon(xPoints, yPoints, 3); // Draw triangle as a polygon
+    }
+
+    private void drawStar(int centerX, int centerY, int size) {
+        int[] xPoints = new int[10];
+        int[] yPoints = new int[10];
+
+        for (int i = 0; i < 10; i++) {
+            double angle = i * Math.PI / 5;
+            double radius = (i % 2 == 0) ? size : size / 2.5;
+            xPoints[i] = centerX + (int) (Math.cos(angle) * radius);
+            yPoints[i] = centerY - (int) (Math.sin(angle) * radius);
+        }
+
+        g2d.drawPolygon(xPoints, yPoints, 10); // Draw star as a polygon
+    }
+
+    private void drawPentagon(int centerX, int centerY, int size) {
+        int[] xPoints = new int[5];
+        int[] yPoints = new int[5];
+
+        for (int i = 0; i < 5; i++) {
+            double angle = i * 2 * Math.PI / 5 - Math.PI / 10; // Adjust angle for pentagon shape
+            xPoints[i] = centerX + (int) (Math.cos(angle) * size);
+            yPoints[i] = centerY + (int) (Math.sin(angle) * size);
+        }
+
+        g2d.drawPolygon(xPoints, yPoints, 5); // Draw pentagon as a polygon
+    }
+
+    private void drawHexagon(int centerX, int centerY, int size) {
+        int[] xPoints = new int[6];
+        int[] yPoints = new int[6];
+
+        for (int i = 0; i < 6; i++) {
+            double angle = i * 2 * Math.PI / 6 - Math.PI / 12; // Adjust angle for hexagon shape
+            xPoints[i] = centerX + (int) (Math.cos(angle) * size);
+            yPoints[i] = centerY + (int) (Math.sin(angle) * size);
+        }
+
+        g2d.drawPolygon(xPoints, yPoints, 6); // Draw hexagon as a polygon
     }
 
     private void draw(int x, int y) {
