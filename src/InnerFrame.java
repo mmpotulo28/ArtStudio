@@ -750,7 +750,7 @@ public class InnerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnHexagonActionPerformed
 
     private void BtnCropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCropActionPerformed
-        // TODO add your handling code here:
+        drawingCanvas.setCroppingMode(true);  // Activate cropping mode.
     }//GEN-LAST:event_BtnCropActionPerformed
 
     private void BtnRotateClockwiseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRotateClockwiseActionPerformed
