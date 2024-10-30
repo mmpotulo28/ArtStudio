@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -14,26 +13,26 @@ public class DrawingCanvas extends JPanel {
 
     private Color currentColor = Color.BLACK; // Default color for brush
 
-    /*======================FLAGS===========================*/
+    /* ======================FLAGS=========================== */
     private boolean isEraserActive = false; // Flag for eraser mode
     private boolean isDrawingShape = false; // Flag for shape drawing mode
     private boolean isResizingImage = false; // Flag for resizing the image
     private boolean isDraggingImage = false; // Flag for dragging the image
     private boolean isCroppingImage = false; // Flag for cropping the image
 
-    /*======================FLAGS===========================*/
+    /* ======================FLAGS=========================== */
     private String currentShape = "Rectangle"; // Current shape type
     private int lastX, lastY; // Last mouse coordinates
     private int brushWidth = 5; // Default brush width
     private Image canvasImage; // Image for the canvas
     private Graphics2D g2d; // Graphics context for drawing
 
-    /*======================Image Hanlding===========================*/
+    /* ======================Image Handling=========================== */
     private BufferedImage loadedImage;
     private int imageX, imageY; // Position of the image
     private int imageWidth, imageHeight; // Size of the image
 
-    /*======================Image Cropping===========================*/
+    /* ======================Image Cropping=========================== */
     private int cropStartX, cropStartY; // Starting point of crop rectangle
     private int cropEndX, cropEndY; // Ending point of crop rectangle
 
@@ -48,7 +47,7 @@ public class DrawingCanvas extends JPanel {
                 lastY = e.getY(); // Store starting coordinates
                 if (isEraserActive) {
                     erase(lastX, lastY); // Erase at the starting point
-                } // Check if the mouse is over the loaded image
+                }
                 if (loadedImage != null && e.getX() >= imageX && e.getX() <= (imageX + imageWidth)
                         && e.getY() >= imageY && e.getY() <= (imageY + imageHeight)) {
                     if (isDraggingImage) {
@@ -67,13 +66,14 @@ public class DrawingCanvas extends JPanel {
                 } else if (isCroppingImage) {
                     cropEndX = e.getX();
                     cropEndY = e.getY();
-                    performCrop();  // Perform cropping when mouse is released.
-                } else if (!(isEraserActive && isDrawingShape && isDraggingImage && isResizingImage && isCroppingImage)) {
+                    performCrop(); // Perform cropping when mouse is released.
+                } else if (!(isEraserActive || isDrawingShape || isDraggingImage || isResizingImage
+                        || isCroppingImage)) {
                     draw(e.getX(), e.getY()); // Draw at the end point when released
                 }
 
-                isDraggingImage = false; // Stop dragging 
-                isResizingImage = false;  // Stop resizing
+                isDraggingImage = false; // Stop dragging
+                isResizingImage = false; // Stop resizing
             }
         });
 
@@ -87,8 +87,9 @@ public class DrawingCanvas extends JPanel {
                 } else if (isDraggingImage) {
                     repositionImage(e.getX(), e.getY()); // Reposition the loaded image while dragging
                 } else if (isResizingImage) {
-                    resizeImage(e.getX(), e.getY());  // Resize the loaded image while dragging (optional)
-                } else if (!(isEraserActive && isDrawingShape && isDraggingImage && isResizingImage && isCroppingImage)) {
+                    resizeImage(e.getX(), e.getY()); // Resize the loaded image while dragging (optional)
+                } else if (!(isEraserActive || isDrawingShape || isDraggingImage || isResizingImage
+                        || isCroppingImage)) {
                     draw(e.getX(), e.getY()); // Draw while dragging
                     lastX = e.getX(); // Update last coordinates
                     lastY = e.getY(); // Update last coordinates
@@ -110,11 +111,11 @@ public class DrawingCanvas extends JPanel {
             // Draw border around the loaded image when resizing or repositioning
             if (isDraggingImage || isResizingImage) {
                 g.setColor(Color.RED);
-                g.drawRect(imageX, imageY, imageWidth, imageHeight);  // Draw border around the image.
+                g.drawRect(imageX, imageY, imageWidth, imageHeight); // Draw border around the image.
             } else if (isCroppingImage) {
                 g.setColor(Color.BLUE);
                 g.drawRect(Math.min(cropStartX, cropEndX), Math.min(cropStartY, cropEndY),
-                        Math.abs(cropEndX - cropStartX), Math.abs(cropEndY - cropStartY));  // Cropping rectangle.
+                        Math.abs(cropEndX - cropStartX), Math.abs(cropEndY - cropStartY)); // Cropping rectangle.
             }
         }
     }
@@ -126,10 +127,10 @@ public class DrawingCanvas extends JPanel {
     }
 
     public void clearCanvas() {
-        if (g2d != null) {  // Check if g2d is initialized before using it
+        if (g2d != null) { // Check if g2d is initialized before using it
             g2d.setColor(Color.WHITE);
             g2d.fillRect(0, 0, getWidth(), getHeight());
-            loadedImage = null;  // Clear loaded image reference.
+            loadedImage = null; // Clear loaded image reference.
             repaint();
         }
     }
@@ -142,8 +143,8 @@ public class DrawingCanvas extends JPanel {
     public void activateEraser() {
         this.isEraserActive = true;
         this.isDrawingShape = false;
-        this.isResizingImage = false;  // Deactivate resizing when eraser is active.
-        this.isDraggingImage = false;  // Deactivate dragging when eraser is active.
+        this.isResizingImage = false; // Deactivate resizing when eraser is active.
+        this.isDraggingImage = false; // Deactivate dragging when eraser is active.
     }
 
     public void deactivateEraser() {
@@ -152,7 +153,7 @@ public class DrawingCanvas extends JPanel {
 
     public void setBrushWidth(int width) {
         this.brushWidth = width;
-        if (g2d != null) {  // Update stroke width in g2d if initialized
+        if (g2d != null) { // Update stroke width in g2d if initialized
             g2d.setStroke(new BasicStroke(brushWidth));
         }
     }
@@ -161,8 +162,8 @@ public class DrawingCanvas extends JPanel {
         this.isDrawingShape = drawingShape;
         this.currentShape = shapeType;
 
-        this.isResizingImage = false;  // Deactivate resizing when drawing shapes.
-        this.isDraggingImage = false;   // Deactivate dragging when drawing shapes.
+        this.isResizingImage = false; // Deactivate resizing when drawing shapes.
+        this.isDraggingImage = false; // Deactivate dragging when drawing shapes.
         isCroppingImage = false;
     }
 
@@ -175,20 +176,20 @@ public class DrawingCanvas extends JPanel {
 
     public void setDraggingMode(boolean draggingMode) {
         isDraggingImage = draggingMode;
-        isDrawingShape = false;   // Deactivate shape drawing when dragging.
-        isResizingImage = false;   // Deactivate resizing when dragging.
+        isDrawingShape = false; // Deactivate shape drawing when dragging.
+        isResizingImage = false; // Deactivate resizing when dragging.
         isCroppingImage = false;
     }
 
     public void setCroppingMode(boolean croppingMode) {
         isCroppingImage = croppingMode;
         isDraggingImage = false;
-        isDrawingShape = false;   // Deactivate shape drawing when dragging.
-        isResizingImage = false;   // Deactivate resizing when dragging.
+        isDrawingShape = false; // Deactivate shape drawing when dragging.
+        isResizingImage = false; // Deactivate resizing when dragging.
     }
 
     private void drawShape(int x, int y) {
-        if (g2d != null) {  // Check if g2d is initialized before using it
+        if (g2d != null) { // Check if g2d is initialized before using it
             g2d.setColor(currentColor);
             int width = Math.abs(x - lastX);
             int height = Math.abs(y - lastY);
@@ -228,8 +229,8 @@ public class DrawingCanvas extends JPanel {
     }
 
     private void drawTriangle(int x1, int y1, int x2, int y2) {
-        int[] xPoints = {x1, x2, (x1 + x2) / 2};
-        int[] yPoints = {y1, y1, y1 - Math.abs(x2 - x1)};
+        int[] xPoints = { x1, x2, (x1 + x2) / 2 };
+        int[] yPoints = { y1, y1, y1 - Math.abs(x2 - x1) };
         g2d.drawPolygon(xPoints, yPoints, 3); // Draw triangle as a polygon
     }
 
@@ -275,7 +276,7 @@ public class DrawingCanvas extends JPanel {
 
     private void draw(int x, int y) {
         System.out.println("Drawing" + x + "-" + y);
-        if (g2d != null) {  // Check if g2d is initialized before using it
+        if (g2d != null) { // Check if g2d is initialized before using it
             g2d.setColor(currentColor);
             g2d.drawLine(lastX, lastY, x, y);
             System.out.println("DrawLine" + lastX + "-" + lastY);
@@ -284,21 +285,21 @@ public class DrawingCanvas extends JPanel {
     }
 
     private void erase(int x, int y) {
-        if (g2d != null) {  // Check if g2d is initialized before using it
+        if (g2d != null) { // Check if g2d is initialized before using it
             g2d.setColor(Color.WHITE);
             g2d.fillOval(x - brushWidth / 2, y - brushWidth / 2, brushWidth, brushWidth);
             repaint();
         }
     }
 
-//    image processing    
+    // image processing
     public void addImage(String filePath) throws IOException {
-        loadedImage = ImageIO.read(new File(filePath));  // Load the image from file path.
+        loadedImage = ImageIO.read(new File(filePath)); // Load the image from file path.
 
-        this.imageX = 50;  // Default position on canvas (can be adjusted)
-        this.imageY = 50;  // Default position on canvas (can be adjusted)
+        this.imageX = 50; // Default position on canvas (can be adjusted)
+        this.imageY = 50; // Default position on canvas (can be adjusted)
 
-        if (loadedImage != null) {  // Check if the loaded image is not null.
+        if (loadedImage != null) { // Check if the loaded image is not null.
             this.imageWidth = loadedImage.getWidth();
             this.imageHeight = loadedImage.getHeight();
             repaint();
@@ -322,10 +323,10 @@ public class DrawingCanvas extends JPanel {
             this.imageWidth = croppedImg.getWidth();
             this.imageHeight = croppedImg.getHeight();
 
-            this.imageX += x1 - Math.min(imageX + width, x1);  // Adjust position after cropping.
+            this.imageX += x1 - Math.min(imageX + width, x1); // Adjust position after cropping.
             this.imageY += y1 - Math.min(imageY + height, y1);
 
-            repaint();  // Repaint to show cropped image.
+            repaint(); // Repaint to show cropped image.
         }
     }
 
@@ -358,4 +359,29 @@ public class DrawingCanvas extends JPanel {
         repaint();
     }
 
+    public void rotateImageClockwise() {
+        if (loadedImage != null) {
+            loadedImage = rotateImage(loadedImage, 45);
+            repaint();
+        }
+    }
+
+    public void rotateImageAntiClockwise() {
+        if (loadedImage != null) {
+            loadedImage = rotateImage(loadedImage, -45);
+            repaint();
+        }
+    }
+
+    private BufferedImage rotateImage(BufferedImage image, double angle) {
+        int w = image.getWidth();
+        int h = image.getHeight();
+        BufferedImage rotatedImage = new BufferedImage(w, h, image.getType());
+        Graphics2D g2d = rotatedImage.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.rotate(Math.toRadians(angle), w / 2, h / 2);
+        g2d.drawImage(image, 0, 0, null);
+        g2d.dispose();
+        return rotatedImage;
+    }
 }
