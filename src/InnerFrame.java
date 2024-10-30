@@ -843,7 +843,6 @@ public class InnerFrame extends javax.swing.JFrame {
     }// GEN-LAST:event_BtnBrushActionPerformed
 
     private void BtnEraserActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BtnEraserActionPerformed
-        // TODO add your handling code here:
         drawingCanvas.activateEraser(); // Activate eraser mode when button is pressed
     }// GEN-LAST:event_BtnEraserActionPerformed
 
