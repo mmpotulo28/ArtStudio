@@ -317,4 +317,10 @@ public class DrawingCanvas extends JPanel {
         imageHandler.rotateImageAntiClockwise();
         repaint();
     }
+
+    // use save functionality from IMageHandle
+    public void saveCanvasAsPNG(String filePath) throws IOException {
+        imageHandler.saveCanvasAsPNG(canvasImage, filePath);
+    }
+
 }

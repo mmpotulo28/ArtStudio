@@ -821,8 +821,36 @@ public class InnerFrame extends javax.swing.JFrame {
     }// GEN-LAST:event_BtnExitActionPerformed
 
     private void BtnSaveActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BtnSaveActionPerformed
-        // TODO add your handling code here:
-        System.out.println("BTN save Action Perfomed");
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save As");
+
+        fileChooser.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".png");
+            }
+
+            @Override
+            public String getDescription() {
+                return "PNG Images (*.png)";
+            }
+        });
+
+        fileChooser.setAcceptAllFileFilterUsed(false);
+
+        if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            if (!fileToSave.getAbsolutePath().toLowerCase().endsWith(".png")) {
+                fileToSave = new File(fileToSave.getAbsolutePath() + ".png");
+            }
+            try {
+                drawingCanvas.saveCanvasAsPNG(fileToSave.getAbsolutePath());
+                JOptionPane.showMessageDialog(this, "File saved successfully!");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error saving file: " + ex.getMessage());
+            }
+        }
+
     }// GEN-LAST:event_BtnSaveActionPerformed
 
     private void BtnSquareActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BtnSquareActionPerformed

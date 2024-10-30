@@ -122,4 +122,15 @@ public class ImageHandler {
   cropEndX = x;
   cropEndY = y;
  }
+
+ public void saveCanvasAsPNG(Image canvasImage, String filePath) throws IOException {
+  if (canvasImage != null) {
+   BufferedImage bufferedImage = new BufferedImage(canvasImage.getWidth(null), canvasImage.getHeight(null),
+     BufferedImage.TYPE_INT_ARGB);
+   Graphics2D g2d = bufferedImage.createGraphics();
+   g2d.drawImage(canvasImage, 0, 0, null);
+   g2d.dispose();
+   ImageIO.write(bufferedImage, "png", new File(filePath));
+  }
+ }
 }
