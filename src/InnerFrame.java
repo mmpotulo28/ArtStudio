@@ -891,7 +891,6 @@ public class InnerFrame extends javax.swing.JFrame {
         int value = source.getValue(); // Get current value of the slider
 
         drawingCanvas.setBrushWidth(value); // Set brush/eraser width in DrawingCanvas
-        System.out.println("Current Brush/Eraser Width: " + value); // Print the value for debugging purposes
     }// GEN-LAST:event_jSlider1StateChanged
 
     private void BtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BtnDeleteActionPerformed

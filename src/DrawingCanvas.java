@@ -74,7 +74,6 @@ public class DrawingCanvas extends JPanel {
                 if (isEraserActive) {
                     erase(e.getX(), e.getY()); // Erase while dragging
                 } else if (isDrawingShape) {
-                    System.out.println("isDrawing Shape - Drag");
                 } else if (isDraggingImage) {
                     imageHandler.repositionImage(e.getX(), e.getY()); // Reposition the loaded image while dragging
                 } else if (isResizingImage) {
@@ -189,8 +188,6 @@ public class DrawingCanvas extends JPanel {
             int width = Math.abs(x - lastX);
             int height = Math.abs(y - lastY);
 
-            System.out.println("isDrawing Shape - Release" + height + "-" + width);
-
             switch (currentShape) {
                 case "Rectangle":
                     g2d.drawRect(Math.min(lastX, x), Math.min(lastY, y), width, height); // Draw rectangle
@@ -270,11 +267,9 @@ public class DrawingCanvas extends JPanel {
     }
 
     private void draw(int x, int y) {
-        System.out.println("Drawing" + x + "-" + y);
         if (g2d != null) { // Check if g2d is initialized before using it
             g2d.setColor(currentColor);
             g2d.drawLine(lastX, lastY, x, y);
-            System.out.println("DrawLine" + lastX + "-" + lastY);
             repaint();
         }
     }
