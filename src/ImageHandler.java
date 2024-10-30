@@ -129,6 +129,7 @@ public class ImageHandler {
      BufferedImage.TYPE_INT_ARGB);
    Graphics2D g2d = bufferedImage.createGraphics();
    g2d.drawImage(canvasImage, 0, 0, null);
+   g2d.drawImage(loadedImage, imageX, imageY, null); // Draw the loaded image onto the canvas
    g2d.dispose();
    ImageIO.write(bufferedImage, "png", new File(filePath));
   }
