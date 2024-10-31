@@ -434,6 +434,9 @@
               <Image iconType="3" name="/Icons/text.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnTextActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="BtnResize">
           <Properties>
@@ -717,6 +720,9 @@
               <Image iconType="3" name="/Icons/zoom-in-line.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnZoominActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="BtnGoforward">
           <Properties>
@@ -734,6 +740,9 @@
               <Image iconType="3" name="/Icons/zoom-out-line (1).png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnZoomoutActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="BtnDelete">
           <Properties>
