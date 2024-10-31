@@ -639,7 +639,7 @@ public class InnerFrame extends javax.swing.JFrame {
         String text = JOptionPane.showInputDialog(this, "Enter text to add:");
         if (text != null && !text.isEmpty()) {
             drawingCanvas.setCurrentText(text);
-        }        
+        }
     }//GEN-LAST:event_BtnTextActionPerformed
     
     private void BtnNewActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BtnNewActionPerformed
@@ -730,6 +730,7 @@ public class InnerFrame extends javax.swing.JFrame {
 
     private void BtnBrushActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BtnBrushActionPerformed
         // TODO add your handling code here:
+        drawingCanvas.setBrushDrawingMode(true);
         Color selectedColor = JColorChooser.showDialog(this, "Choose Brush Color", Color.BLACK);
         
         if (selectedColor != null) {
@@ -737,7 +738,6 @@ public class InnerFrame extends javax.swing.JFrame {
         }
         
         drawingCanvas.deactivateEraser();
-        drawingCanvas.setDrawingShape(false, "");
     }// GEN-LAST:event_BtnBrushActionPerformed
 
     private void BtnEraserActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BtnEraserActionPerformed

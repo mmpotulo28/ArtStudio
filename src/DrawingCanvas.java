@@ -17,6 +17,8 @@ public class DrawingCanvas extends JPanel {
     private boolean isResizingImage = false; // Flag for resizing the image
     private boolean isDraggingImage = false; // Flag for dragging the image
     private boolean isCroppingImage = false; // Flag for cropping the image
+    private boolean isAddingText = false; // Flag for adding text mode
+    private boolean isBrushDrawing = true; // Flag for brush drawing mode
 
     /* ======================FLAGS=========================== */
     private String currentShape = "Rectangle"; // Current shape type
@@ -33,7 +35,6 @@ public class DrawingCanvas extends JPanel {
 
     /* ======================Text Handling=========================== */
     private String currentText = "";
-    private boolean isAddingText = false;
     private int textX, textY; // Coordinates for text positioning
 
     public DrawingCanvas() {
@@ -52,6 +53,8 @@ public class DrawingCanvas extends JPanel {
                     textX = e.getX();
                     textY = e.getY();
                     drawText(textX, textY);
+                    isAddingText = false;
+                    currentText = "";
                 }
                 if (imageHandler.getLoadedImage() != null && e.getX() >= imageHandler.getImageX()
                         && e.getX() <= (imageHandler.getImageX() + imageHandler.getImageWidth())
@@ -72,7 +75,7 @@ public class DrawingCanvas extends JPanel {
                 } else if (isCroppingImage) {
                     imageHandler.setCropEnd(e.getX(), e.getY());
                     imageHandler.performCrop(); // Perform cropping when mouse is released.
-                } else if (!(isEraserActive || isDrawingShape || isDraggingImage || isResizingImage
+                } else if (isBrushDrawing && !(isEraserActive || isDrawingShape || isDraggingImage || isResizingImage
                         || isCroppingImage)) {
                     draw(e.getX(), e.getY()); // Draw at the end point when released
                 }
@@ -96,12 +99,17 @@ public class DrawingCanvas extends JPanel {
                     textX = e.getX();
                     textY = e.getY();
                     repaint();
-                } else if (!(isEraserActive || isDrawingShape || isDraggingImage || isResizingImage
-                        || isCroppingImage)) {
+                } else if (isBrushDrawing) {
                     draw(e.getX(), e.getY());
                     lastX = e.getX();
                     lastY = e.getY();
+                    System.out.println("Drag - brush");
+
                 }
+
+                System.out.println(
+                        isBrushDrawing && !(isEraserActive || isDrawingShape || isDraggingImage || isResizingImage
+                                || isCroppingImage));
 
                 repaint();
             }
@@ -180,6 +188,7 @@ public class DrawingCanvas extends JPanel {
         this.isDraggingImage = false; // Deactivate dragging when drawing shapes.
         isCroppingImage = false;
         this.isAddingText = false;
+        this.isBrushDrawing = false; // Deactivate brush drawing when drawing shapes.
     }
 
     public void activateEraser() {
@@ -188,6 +197,7 @@ public class DrawingCanvas extends JPanel {
         this.isResizingImage = false; // Deactivate resizing when eraser is active.
         this.isDraggingImage = false; // Deactivate dragging when eraser is active.
         this.isAddingText = false;
+        this.isBrushDrawing = false; // Deactivate brush drawing when eraser is active.
     }
 
     public void setResizingMode(boolean resizingMode) {
@@ -196,6 +206,7 @@ public class DrawingCanvas extends JPanel {
         isDraggingImage = false;
         isCroppingImage = false;
         this.isAddingText = false;
+        this.isBrushDrawing = false; // Deactivate brush drawing when resizing.
     }
 
     public void setDraggingMode(boolean draggingMode) {
@@ -204,14 +215,16 @@ public class DrawingCanvas extends JPanel {
         isResizingImage = false; // Deactivate resizing when dragging.
         isCroppingImage = false;
         this.isAddingText = false;
+        this.isBrushDrawing = false; // Deactivate brush drawing when dragging.
     }
 
     public void setCroppingMode(boolean croppingMode) {
         isCroppingImage = croppingMode;
         isDraggingImage = false;
-        isDrawingShape = false; // Deactivate shape drawing when dragging.
-        isResizingImage = false; // Deactivate resizing when dragging.
+        isDrawingShape = false; // Deactivate shape drawing when cropping.
+        isResizingImage = false; // Deactivate resizing when cropping.
         this.isAddingText = false;
+        this.isBrushDrawing = false; // Deactivate brush drawing when cropping.
     }
 
     public void setAddingTextMode(boolean addingText) {
@@ -220,6 +233,17 @@ public class DrawingCanvas extends JPanel {
         this.isResizingImage = false;
         this.isDraggingImage = false;
         this.isCroppingImage = false;
+        this.isBrushDrawing = false; // Deactivate brush drawing when adding text.
+    }
+
+    public void setBrushDrawingMode(boolean brushDrawing) {
+        System.out.println("brush mode active: " + brushDrawing);
+        this.isBrushDrawing = brushDrawing;
+        this.isDrawingShape = false;
+        this.isResizingImage = false;
+        this.isDraggingImage = false;
+        this.isCroppingImage = false;
+        this.isAddingText = false;
     }
 
     public void setCurrentText(String text) {
@@ -312,6 +336,7 @@ public class DrawingCanvas extends JPanel {
 
     private void draw(int x, int y) {
         if (g2d != null) { // Check if g2d is initialized before using it
+            System.out.println("draw called: " + isBrushDrawing);
             g2d.setColor(currentColor);
             g2d.drawLine(lastX, lastY, x, y);
             repaint();
