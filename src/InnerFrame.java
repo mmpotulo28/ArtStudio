@@ -770,12 +770,12 @@ public class InnerFrame extends javax.swing.JFrame {
 
     private void BtnGobackActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BtnGobackActionPerformed
         // TODO add your handling code here:
-        // drawingCanvas.undo(); // Undo action when go back button is pressed
+        drawingCanvas.undo(); // Undo action when go back button is pressed
     }// GEN-LAST:event_BtnGobackActionPerformed
 
     private void BtnGoforwardActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BtnGoforwardActionPerformed
         // TODO add your handling code here:
-        // drawingCanvas.redo(); // Redo action when go forward button is pressed
+        drawingCanvas.redo(); // Redo action when go forward button is pressed
     }// GEN-LAST:event_BtnGoforwardActionPerformed
 
     private void BtnRectangleActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BtnRectangleActionPerformed
@@ -793,7 +793,7 @@ public class InnerFrame extends javax.swing.JFrame {
 
     private void BtnStarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BtnStarActionPerformed
         // TODO add your handling code here:
-        drawingCanvas.setDrawingShape(true, "drawStar");
+        drawingCanvas.setDrawingShape(true, "Star");
     }// GEN-LAST:event_BtnStarActionPerformed
 
     private void BtnLayersActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BtnLayersActionPerformed

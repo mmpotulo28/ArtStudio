@@ -2,7 +2,10 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 
 public class DrawingCanvas extends JPanel {
@@ -37,9 +40,13 @@ public class DrawingCanvas extends JPanel {
     private String currentText = "";
     private int textX, textY; // Coordinates for text positioning
 
+    /* ======================Canvas History=========================== */
+    private List<Image> canvasHistory = new ArrayList<>();
+    private int currentHistoryIndex = -1;
+
     public DrawingCanvas() {
-        setBackground(Color.WHITE); // Set background color
-        setDoubleBuffered(true); // Enable double buffering
+        setBackground(Color.WHITE);
+        setDoubleBuffered(true);
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -80,6 +87,8 @@ public class DrawingCanvas extends JPanel {
                     draw(e.getX(), e.getY()); // Draw at the end point when released
                 }
 
+                saveCanvasState();
+
                 isDraggingImage = false; // Stop dragging
                 isResizingImage = false; // Stop resizing
             }
@@ -103,13 +112,8 @@ public class DrawingCanvas extends JPanel {
                     draw(e.getX(), e.getY());
                     lastX = e.getX();
                     lastY = e.getY();
-                    System.out.println("Drag - brush");
 
                 }
-
-                System.out.println(
-                        isBrushDrawing && !(isEraserActive || isDrawingShape || isDraggingImage || isResizingImage
-                                || isCroppingImage));
 
                 repaint();
             }
@@ -211,20 +215,20 @@ public class DrawingCanvas extends JPanel {
 
     public void setDraggingMode(boolean draggingMode) {
         isDraggingImage = draggingMode;
-        isDrawingShape = false; // Deactivate shape drawing when dragging.
-        isResizingImage = false; // Deactivate resizing when dragging.
+        isDrawingShape = false;
+        isResizingImage = false;
         isCroppingImage = false;
         this.isAddingText = false;
-        this.isBrushDrawing = false; // Deactivate brush drawing when dragging.
+        this.isBrushDrawing = false;
     }
 
     public void setCroppingMode(boolean croppingMode) {
         isCroppingImage = croppingMode;
         isDraggingImage = false;
-        isDrawingShape = false; // Deactivate shape drawing when cropping.
-        isResizingImage = false; // Deactivate resizing when cropping.
+        isDrawingShape = false;
+        isResizingImage = false;
         this.isAddingText = false;
-        this.isBrushDrawing = false; // Deactivate brush drawing when cropping.
+        this.isBrushDrawing = false;
     }
 
     public void setAddingTextMode(boolean addingText) {
@@ -233,11 +237,10 @@ public class DrawingCanvas extends JPanel {
         this.isResizingImage = false;
         this.isDraggingImage = false;
         this.isCroppingImage = false;
-        this.isBrushDrawing = false; // Deactivate brush drawing when adding text.
+        this.isBrushDrawing = false;
     }
 
     public void setBrushDrawingMode(boolean brushDrawing) {
-        System.out.println("brush mode active: " + brushDrawing);
         this.isBrushDrawing = brushDrawing;
         this.isDrawingShape = false;
         this.isResizingImage = false;
@@ -336,7 +339,6 @@ public class DrawingCanvas extends JPanel {
 
     private void draw(int x, int y) {
         if (g2d != null) { // Check if g2d is initialized before using it
-            System.out.println("draw called: " + isBrushDrawing);
             g2d.setColor(currentColor);
             g2d.drawLine(lastX, lastY, x, y);
             repaint();
@@ -354,6 +356,7 @@ public class DrawingCanvas extends JPanel {
     // image processing
     public void addImage(String filePath) throws IOException {
         imageHandler.addImage(filePath);
+        saveCanvasState();
         repaint();
     }
 
@@ -405,4 +408,43 @@ public class DrawingCanvas extends JPanel {
             repaint();
         }
     }
+
+    public void undo() {
+        if (currentHistoryIndex > 0) {
+            currentHistoryIndex--;
+            canvasImage = copyImage(canvasHistory.get(currentHistoryIndex));
+            g2d = (Graphics2D) canvasImage.getGraphics();
+            repaint();
+        }
+    }
+
+    public void redo() {
+        if (currentHistoryIndex < canvasHistory.size() - 1) {
+            currentHistoryIndex++;
+            canvasImage = copyImage(canvasHistory.get(currentHistoryIndex));
+            g2d = (Graphics2D) canvasImage.getGraphics();
+            repaint();
+        }
+    }
+
+    private void saveCanvasState() {
+        if (currentHistoryIndex < canvasHistory.size() - 1) {
+            canvasHistory = canvasHistory.subList(0, currentHistoryIndex + 1);
+        }
+        if (canvasHistory.size() == 20) {
+            canvasHistory.remove(0);
+        } else {
+            currentHistoryIndex++;
+        }
+        canvasHistory.add(copyImage(canvasImage));
+    }
+
+    private Image copyImage(Image img) {
+        BufferedImage copy = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        Graphics g = copy.getGraphics();
+        g.drawImage(img, 0, 0, null);
+        g.dispose();
+        return copy;
+    }
+
 }
