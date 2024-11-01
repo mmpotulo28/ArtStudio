@@ -31,56 +31,68 @@ public class ImageHandler {
   return imageHeight;
  }
 
- public void addImage(String filePath) throws IOException {
-  loadedImage = ImageIO.read(new File(filePath)); // Load the image from file path.
+ public void addImage(String filePath) {
+  try {
+   loadedImage = ImageIO.read(new File(filePath)); // Load the image from file path.
 
-  this.imageX = 50; // Default position on canvas (can be adjusted)
-  this.imageY = 50; // Default position on canvas (can be adjusted)
+   this.imageX = 50; // Default position on canvas (can be adjusted)
+   this.imageY = 50; // Default position on canvas (can be adjusted)
 
-  if (loadedImage != null) { // Check if the loaded image is not null.
-   this.imageWidth = loadedImage.getWidth();
-   this.imageHeight = loadedImage.getHeight();
-  } else {
-   throw new IOException("Failed to load image.");
+   if (loadedImage != null) { // Check if the loaded image is not null.
+    this.imageWidth = loadedImage.getWidth();
+    this.imageHeight = loadedImage.getHeight();
+   } else {
+    throw new IOException("Failed to load image.");
+   }
+  } catch (IOException e) {
+   e.printStackTrace();
   }
  }
 
  public void performCrop() {
   if (loadedImage != null) {
-   int x1 = Math.min(cropStartX, cropEndX);
-   int y1 = Math.min(cropStartY, cropEndY);
-   int width = Math.abs(cropEndX - cropStartX);
-   int height = Math.abs(cropEndY - cropStartY);
+   try {
+    int x1 = Math.min(cropStartX, cropEndX);
+    int y1 = Math.min(cropStartY, cropEndY);
+    int width = Math.abs(cropEndX - cropStartX);
+    int height = Math.abs(cropEndY - cropStartY);
 
-   BufferedImage croppedImg = loadedImage.getSubimage(x1 - imageX, y1 - imageY, width, height);
-   loadedImage = croppedImg;
-   this.imageWidth = croppedImg.getWidth();
-   this.imageHeight = croppedImg.getHeight();
+    BufferedImage croppedImg = loadedImage.getSubimage(x1 - imageX, y1 - imageY, width, height);
+    loadedImage = croppedImg;
+    this.imageWidth = croppedImg.getWidth();
+    this.imageHeight = croppedImg.getHeight();
 
-   this.imageX += x1 - Math.min(imageX + width, x1); // Adjust position after cropping.
-   this.imageY += y1 - Math.min(imageY + height, y1);
+    this.imageX += x1 - Math.min(imageX + width, x1); // Adjust position after cropping.
+    this.imageY += y1 - Math.min(imageY + height, y1);
+   } catch (RasterFormatException e) {
+    e.printStackTrace();
+   }
   }
  }
 
  public void resizeImage(int newWidth, int newHeight) {
   if (loadedImage != null) {
-   // Create a new BufferedImage with the desired dimensions
-   BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-   Graphics2D g = resizedImage.createGraphics();
+   try {
+    // Create a new BufferedImage with the desired dimensions
+    BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g = resizedImage.createGraphics();
 
-   // Set rendering hints for better quality
-   g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-   g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-   g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    // Set rendering hints for better quality
+    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+    g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-   // Draw the original image scaled to the new size
-   g.drawImage(loadedImage, 0, 0, newWidth, newHeight, null);
-   g.dispose();
+    // Draw the original image scaled to the new size
+    g.drawImage(loadedImage, 0, 0, newWidth, newHeight, null);
+    g.dispose();
 
-   // Update loaded image and dimensions
-   loadedImage = resizedImage;
-   this.imageWidth = newWidth;
-   this.imageHeight = newHeight;
+    // Update loaded image and dimensions
+    loadedImage = resizedImage;
+    this.imageWidth = newWidth;
+    this.imageHeight = newHeight;
+   } catch (Exception e) {
+    e.printStackTrace();
+   }
   }
  }
 
@@ -91,13 +103,21 @@ public class ImageHandler {
 
  public void rotateImageClockwise() {
   if (loadedImage != null) {
-   loadedImage = rotateImage(loadedImage, 45);
+   try {
+    loadedImage = rotateImage(loadedImage, 45);
+   } catch (Exception e) {
+    e.printStackTrace();
+   }
   }
  }
 
  public void rotateImageAntiClockwise() {
   if (loadedImage != null) {
-   loadedImage = rotateImage(loadedImage, -45);
+   try {
+    loadedImage = rotateImage(loadedImage, -45);
+   } catch (Exception e) {
+    e.printStackTrace();
+   }
   }
  }
 
@@ -123,15 +143,19 @@ public class ImageHandler {
   cropEndY = y;
  }
 
- public void saveCanvasAsPNG(Image canvasImage, String filePath) throws IOException {
+ public void saveCanvasAsPNG(Image canvasImage, String filePath) {
   if (canvasImage != null) {
-   BufferedImage bufferedImage = new BufferedImage(canvasImage.getWidth(null), canvasImage.getHeight(null),
-     BufferedImage.TYPE_INT_ARGB);
-   Graphics2D g2d = bufferedImage.createGraphics();
-   g2d.drawImage(canvasImage, 0, 0, null);
-   g2d.drawImage(loadedImage, imageX, imageY, null); // Draw the loaded image onto the canvas
-   g2d.dispose();
-   ImageIO.write(bufferedImage, "png", new File(filePath));
+   try {
+    BufferedImage bufferedImage = new BufferedImage(canvasImage.getWidth(null), canvasImage.getHeight(null),
+      BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2d = bufferedImage.createGraphics();
+    g2d.drawImage(canvasImage, 0, 0, null);
+    g2d.drawImage(loadedImage, imageX, imageY, null); // Draw the loaded image onto the canvas
+    g2d.dispose();
+    ImageIO.write(bufferedImage, "png", new File(filePath));
+   } catch (IOException e) {
+    e.printStackTrace();
+   }
   }
  }
 }
